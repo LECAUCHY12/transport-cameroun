@@ -1,36 +1,114 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Transport Digitalization - Cameroon 🚌🇨🇲
 
-## Getting Started
+Application web et mobile pour digitaliser les transports au Cameroun.
 
-First, run the development server:
+## 🎯 Objectif
+
+Créer une plateforme moderne de réservation et gestion des transports au Cameroun, avec support pour bus, taxi-brousse, moto-taxi et transport urbain.
+
+## 🛠️ Technologies
+
+### Frontend
+- **Angular 19** - Framework web moderne
+- **Angular Material 20** - Interface utilisateur
+- **TypeScript 5.6** - Sécurité des types
+- **PWA** - Progressive Web App pour mobile
+
+### Backend (En développement)
+- **Kotlin** - Langage moderne pour JVM
+- **Spring Boot 3** - Framework backend
+- **PostgreSQL** - Base de données principale
+- **Redis** - Cache et sessions
+
+### Mobile (Futur)
+- **Kotlin Multiplatform Mobile (KMM)** - Apps natives
+- **PWA** - Version web responsive
+
+## 🚀 Démarrage rapide
+
+### Prérequis
+- Node.js 18+
+- Angular CLI
+- Git
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Cloner le repository
+git clone https://github.com/[votre-username]/transport-cameroun
+cd transport-cameroun
+
+# Installer les dépendances frontend
+cd frontend
+npm install
+
+# Lancer le serveur de développement
+ng serve
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+L'application sera disponible sur `http://localhost:4200`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📁 Structure du projet
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+transport-cameroun/
+├── frontend/           # Application Angular
+│   ├── src/
+│   │   ├── app/       # Composants principaux
+│   │   └── styles/    # Styles globaux
+├── backend/           # API Kotlin (à venir)
+├── mobile/           # Apps natives (à venir)
+├── docs/             # Documentation
+└── README.md
+```
 
-## Learn More
+## 🌟 Fonctionnalités
 
-To learn more about Next.js, take a look at the following resources:
+### ✅ Implémentées
+- Interface utilisateur moderne avec Material Design
+- Page d'accueil avec recherche d'itinéraires
+- Navigation responsive
+- Support PWA de base
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 🔄 En développement
+- Système de réservation
+- Gestion des utilisateurs
+- Suivi en temps réel
+- Intégration paiements mobiles
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 📋 Planifiées
+- API backend complète
+- Applications mobiles natives
+- Dashboard administrateur
+- Système de notifications
 
-## Deploy on Vercel
+## 🗺️ Contexte Cameroun
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+L'application est spécialement conçue pour le contexte camerounais :
+- Support French/English
+- Intégration Mobile Money (MTN, Orange)
+- Routes nationales et urbaines
+- Adaptation aux infrastructures locales
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📚 Documentation
+
+- [Conception](./CONCEPTION.md) - Analyse et objectifs
+- [Spécifications](./SPECIFICATIONS.md) - Exigences détaillées
+- [Architecture](./ARCHITECTURE-ACTUALISEE.md) - Architecture technique
+- [Stack Technologique](./STACK-MODERNE.md) - Choix techniques
+
+## 🤝 Contribution
+
+Les contributions sont les bienvenues ! Voir [CONTRIBUTING.md](./CONTRIBUTING.md) pour les guidelines.
+
+## 📄 Licence
+
+Ce projet est sous licence MIT. Voir [LICENSE](./LICENSE) pour plus de détails.
+
+## 👥 Équipe
+
+Projet développé pour digitaliser les transports au Cameroun.
+
+---
+
+🚀 **En cours de développement actif** - Version Alpha

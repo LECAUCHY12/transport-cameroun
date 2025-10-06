@@ -1,0 +1,142 @@
+<!-- Page d'Accueil - Transport Cameroun -->
+<div class="home-container">
+  
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Digitalisez vos Transports au <span class="highlight">Cameroun</span>
+      </h1>
+      <p class="hero-description">
+        Réservez facilement vos trajets en bus, taxi ou moto-taxi. 
+        Paiement sécurisé avec Orange Money et MTN Mobile Money.
+      </p>
+      
+      <!-- Search Form -->
+      <mat-card class="search-card">
+        <mat-card-content>
+          <form class="search-form">
+            <mat-form-field appearance="outline" class="origin-field">
+              <mat-label>Ville de départ</mat-label>
+              <input matInput placeholder="Ex: Douala, Yaoundé..." />
+              <mat-icon matSuffix>location_on</mat-icon>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" class="destination-field">
+              <mat-label>Ville d'arrivée</mat-label>
+              <input matInput placeholder="Ex: Bafoussam, Garoua..." />
+              <mat-icon matSuffix>flag</mat-icon>
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline" class="date-field">
+              <mat-label>Date de voyage</mat-label>
+              <input matInput [matDatepicker]="picker" readonly />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+            
+            <button mat-raised-button color="primary" class="search-button">
+              <mat-icon>search</mat-icon>
+              Rechercher
+            </button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    
+    <!-- Hero Image -->
+    <div class="hero-image">
+      <mat-icon class="transport-icon">directions_bus</mat-icon>
+      <mat-icon class="transport-icon">local_taxi</mat-icon>
+      <mat-icon class="transport-icon">motorcycle</mat-icon>
+    </div>
+  </section>
+  
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="section-header">
+      <h2>Pourquoi choisir Transport Cameroun ?</h2>
+      <p>Une solution moderne pour tous vos besoins de transport</p>
+    </div>
+    
+    <div class="features-grid">
+      <mat-card class="feature-card">
+        <mat-card-content>
+          <mat-icon class="feature-icon">payment</mat-icon>
+          <h3>Paiement Mobile</h3>
+          <p>Orange Money, MTN MoMo et paiement en espèces acceptés</p>
+        </mat-card-content>
+      </mat-card>
+      
+      <mat-card class="feature-card">
+        <mat-card-content>
+          <mat-icon class="feature-icon">gps_fixed</mat-icon>
+          <h3>Suivi en Temps Réel</h3>
+          <p>Localisez votre transport et recevez des notifications</p>
+        </mat-card-content>
+      </mat-card>
+      
+      <mat-card class="feature-card">
+        <mat-card-content>
+          <mat-icon class="feature-icon">verified_user</mat-icon>
+          <h3>Conducteurs Vérifiés</h3>
+          <p>Tous nos chauffeurs sont vérifiés et évalués</p>
+        </mat-card-content>
+      </mat-card>
+      
+      <mat-card class="feature-card">
+        <mat-card-content>
+          <mat-icon class="feature-icon">language</mat-icon>
+          <h3>Multilingue</h3>
+          <p>Disponible en français, anglais et langues locales</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+  
+  <!-- Popular Routes -->
+  <section class="routes-section">
+    <div class="section-header">
+      <h2>Itinéraires Populaires</h2>
+      <p>Les trajets les plus demandés au Cameroun</p>
+    </div>
+    
+    <div class="routes-grid">
+      <mat-card class="route-card" *ngFor="let route of popularRoutes()">
+        <mat-card-content>
+          <div class="route-info">
+            <div class="route-cities">
+              <span class="origin">{{ route.origin }}</span>
+              <mat-icon>arrow_forward</mat-icon>
+              <span class="destination">{{ route.destination }}</span>
+            </div>
+            <div class="route-details">
+              <span class="price">{{ route.price }} FCFA</span>
+              <span class="duration">{{ route.duration }}</span>
+            </div>
+          </div>
+          <button mat-button color="primary">Réserver</button>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+  
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <mat-card class="cta-card">
+      <mat-card-content>
+        <h2>Prêt à commencer ?</h2>
+        <p>Rejoignez des milliers d'utilisateurs qui font confiance à Transport Cameroun</p>
+        <div class="cta-buttons">
+          <button mat-raised-button color="primary" size="large">
+            Créer un Compte
+          </button>
+          <button mat-stroked-button color="primary" size="large">
+            Devenir Conducteur
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </section>
+  
+</div>

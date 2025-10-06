@@ -1,0 +1,63 @@
+<!-- Toolbar Principal -->
+<mat-toolbar color="primary" class="app-toolbar">
+  <button mat-icon-button (click)="drawer.toggle()" aria-label="Menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span class="app-title">{{ title() }}</span>
+  
+  <span class="spacer"></span>
+  
+  <!-- Actions utilisateur -->
+  <button mat-icon-button aria-label="Notifications">
+    <mat-icon>notifications</mat-icon>
+  </button>
+  <button mat-raised-button color="accent" routerLink="/login">
+    Se connecter
+  </button>
+</mat-toolbar>
+
+<!-- Navigation Sidebar -->
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer mode="side" opened class="sidenav">
+    <mat-nav-list>
+      <a mat-list-item routerLink="/home" routerLinkActive="active">
+        <mat-icon matListItemIcon>home</mat-icon>
+        Accueil
+      </a>
+      <a mat-list-item routerLink="/search" routerLinkActive="active">
+        <mat-icon matListItemIcon>search</mat-icon>
+        Rechercher Transport
+      </a>
+      <a mat-list-item routerLink="/bookings" routerLinkActive="active">
+        <mat-icon matListItemIcon>confirmation_number</mat-icon>
+        Mes Réservations
+      </a>
+      <a mat-list-item routerLink="/profile" routerLinkActive="active">
+        <mat-icon matListItemIcon>person</mat-icon>
+        Mon Profil
+      </a>
+      
+      <mat-divider></mat-divider>
+      
+      <!-- Section Conducteur -->
+      <h3 mat-subheader>Espace Conducteur</h3>
+      <a mat-list-item routerLink="/driver/dashboard" routerLinkActive="active">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        Tableau de Bord
+      </a>
+      <a mat-list-item routerLink="/driver/vehicle" routerLinkActive="active">
+        <mat-icon matListItemIcon>directions_car</mat-icon>
+        Mon Véhicule
+      </a>
+      <a mat-list-item routerLink="/driver/earnings" routerLinkActive="active">
+        <mat-icon matListItemIcon>attach_money</mat-icon>
+        Mes Gains
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <!-- Contenu Principal - ROUTER OUTLET CRITIQUE -->
+  <mat-sidenav-content class="main-content">
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
