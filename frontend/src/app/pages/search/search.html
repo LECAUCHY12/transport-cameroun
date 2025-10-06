@@ -1,0 +1,204 @@
+<!-- Page de Recherche Avancée -->
+<div class="search-container">
+  
+  <!-- Header -->
+  <div class="search-header">
+    <h1>Rechercher un Transport</h1>
+    <p>Trouvez le meilleur itinéraire pour votre voyage au Cameroun</p>
+  </div>
+
+  <!-- Formulaire de Recherche Avancée -->
+  <mat-card class="search-form-card">
+    <mat-card-header>
+      <mat-card-title>Détails du Voyage</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form class="advanced-search-form" (ngSubmit)="onSearch()">
+        
+        <!-- Première ligne : Villes -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="origin-field">
+            <mat-label>Ville de départ</mat-label>
+            <input matInput [(ngModel)]="searchForm.origin" name="origin" placeholder="Ex: Douala, Yaoundé..." required />
+            <mat-icon matSuffix>location_on</mat-icon>
+          </mat-form-field>
+          
+          <button mat-icon-button type="button" class="swap-button" (click)="swapCities()">
+            <mat-icon>swap_horiz</mat-icon>
+          </button>
+          
+          <mat-form-field appearance="outline" class="destination-field">
+            <mat-label>Ville d'arrivée</mat-label>
+            <input matInput [(ngModel)]="searchForm.destination" name="destination" placeholder="Ex: Bafoussam, Garoua..." required />
+            <mat-icon matSuffix>flag</mat-icon>
+          </mat-form-field>
+        </div>
+
+        <!-- Deuxième ligne : Dates -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="date-field">
+            <mat-label>Date de départ</mat-label>
+            <input matInput [matDatepicker]="departurePicker" [(ngModel)]="searchForm.departureDate" name="departureDate" readonly required />
+            <mat-datepicker-toggle matSuffix [for]="departurePicker"></mat-datepicker-toggle>
+            <mat-datepicker #departurePicker></mat-datepicker>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline" class="date-field">
+            <mat-label>Date de retour (optionnel)</mat-label>
+            <input matInput [matDatepicker]="returnPicker" [(ngModel)]="searchForm.returnDate" name="returnDate" readonly />
+            <mat-datepicker-toggle matSuffix [for]="returnPicker"></mat-datepicker-toggle>
+            <mat-datepicker #returnPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <!-- Troisième ligne : Filtres -->
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="transport-type-field">
+            <mat-label>Type de transport</mat-label>
+            <mat-select [(ngModel)]="searchForm.transportType" name="transportType">
+              <mat-option value="all">Tous les types</mat-option>
+              <mat-option value="bus">Bus</mat-option>
+              <mat-option value="taxi">Taxi-brousse</mat-option>
+              <mat-option value="moto">Moto-taxi</mat-option>
+              <mat-option value="car">Voiture</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+          <mat-form-field appearance="outline" class="passengers-field">
+            <mat-label>Nombre de passagers</mat-label>
+            <mat-select [(ngModel)]="searchForm.passengers" name="passengers">
+              <mat-option value="1">1 passager</mat-option>
+              <mat-option value="2">2 passagers</mat-option>
+              <mat-option value="3">3 passagers</mat-option>
+              <mat-option value="4">4 passagers</mat-option>
+              <mat-option value="5+">5+ passagers</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Quatrième ligne : Prix et Options -->
+        <div class="form-row">
+          <div class="price-range">
+            <label>Budget (FCFA)</label>
+            <mat-slider min="500" max="15000" step="500" discrete [displayWith]="formatPrice">
+              <input matSliderThumb [(ngModel)]="searchForm.maxPrice" name="maxPrice" />
+            </mat-slider>
+            <span class="price-display">Max: {{ formatPrice(searchForm.maxPrice) }}</span>
+          </div>
+        </div>
+
+        <!-- Options supplémentaires -->
+        <div class="form-row options-row">
+          <mat-checkbox [(ngModel)]="searchForm.airConditioned" name="airConditioned">
+            Climatisation
+          </mat-checkbox>
+          <mat-checkbox [(ngModel)]="searchForm.wifi" name="wifi">
+            WiFi disponible
+          </mat-checkbox>
+          <mat-checkbox [(ngModel)]="searchForm.luggageIncluded" name="luggageIncluded">
+            Bagages inclus
+          </mat-checkbox>
+        </div>
+
+        <!-- Boutons d'action -->
+        <div class="form-actions">
+          <button mat-raised-button color="primary" type="submit" [disabled]="isSearching">
+            <mat-icon>search</mat-icon>
+            {{ isSearching ? 'Recherche...' : 'Rechercher' }}
+          </button>
+          <button mat-button type="button" (click)="resetForm()">
+            <mat-icon>refresh</mat-icon>
+            Réinitialiser
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Résultats de recherche -->
+  <div class="search-results" *ngIf="searchResults().length > 0">
+    <div class="results-header">
+      <h2>{{ searchResults().length }} résultat(s) trouvé(s)</h2>
+      <div class="sort-options">
+        <mat-form-field appearance="outline">
+          <mat-label>Trier par</mat-label>
+          <mat-select [(ngModel)]="sortBy" (selectionChange)="sortResults()">
+            <mat-option value="price">Prix croissant</mat-option>
+            <mat-option value="duration">Durée</mat-option>
+            <mat-option value="departure">Heure de départ</mat-option>
+            <mat-option value="rating">Note</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Liste des résultats -->
+    <div class="results-list">
+      <mat-card class="result-card" *ngFor="let result of searchResults()">
+        <mat-card-content>
+          <div class="result-header">
+            <div class="route-info">
+              <h3>{{ result.origin }} → {{ result.destination }}</h3>
+              <div class="transport-type">
+                <mat-icon>{{ getTransportIcon(result.type) }}</mat-icon>
+                <span>{{ getTransportLabel(result.type) }}</span>
+              </div>
+            </div>
+            <div class="price-info">
+              <span class="price">{{ result.price }} FCFA</span>
+              <span class="per-person">/personne</span>
+            </div>
+          </div>
+
+          <div class="result-details">
+            <div class="time-info">
+              <mat-icon>schedule</mat-icon>
+              <span>Départ: {{ result.departureTime }}</span>
+              <span>Durée: {{ result.duration }}</span>
+            </div>
+            
+            <div class="features">
+              <mat-chip-set>
+                <mat-chip *ngIf="result.airConditioned">
+                  <mat-icon>ac_unit</mat-icon>
+                  Climatisé
+                </mat-chip>
+                <mat-chip *ngIf="result.wifi">
+                  <mat-icon>wifi</mat-icon>
+                  WiFi
+                </mat-chip>
+                <mat-chip *ngIf="result.luggageIncluded">
+                  <mat-icon>luggage</mat-icon>
+                  Bagages inclus
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+
+            <div class="rating">
+              <mat-icon>star</mat-icon>
+              <span>{{ result.rating }}/5</span>
+              <span>({{ result.reviewsCount }} avis)</span>
+            </div>
+          </div>
+
+          <div class="result-actions">
+            <button mat-button color="primary" (click)="viewDetails(result)">
+              Voir détails
+            </button>
+            <button mat-raised-button color="primary" (click)="bookTransport(result)">
+              Réserver
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Message si aucun résultat -->
+  <div class="no-results" *ngIf="hasSearched && searchResults().length === 0">
+    <mat-icon>search_off</mat-icon>
+    <h3>Aucun transport trouvé</h3>
+    <p>Essayez de modifier vos critères de recherche</p>
+  </div>
+
+</div>

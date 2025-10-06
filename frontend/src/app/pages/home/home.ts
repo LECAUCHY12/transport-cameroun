@@ -1,6 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 // Angular Material Imports
 import { MatCardModule } from '@angular/material/card';
@@ -23,6 +24,7 @@ interface PopularRoute {
   imports: [
     CommonModule,
     RouterModule,
+    FormsModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
@@ -35,6 +37,15 @@ interface PopularRoute {
   styleUrl: './home.scss'
 })
 export class Home {
+
+  // Données du formulaire de recherche
+  searchData = {
+    origin: '',
+    destination: '',
+    date: null as Date | null
+  };
+  
+  constructor(private router: Router) {}
   
   // Itinéraires populaires au Cameroun
   popularRoutes = signal<PopularRoute[]>([
@@ -75,4 +86,46 @@ export class Home {
       duration: '2h 30min'
     }
   ]);
+
+  // Fonction de recherche
+  onSearch() {
+    if (!this.searchData.origin || !this.searchData.destination || !this.searchData.date) {
+      alert('Veuillez remplir tous les champs');
+      return;
+    }
+
+    // Naviguer vers la page de recherche avec les paramètres
+    this.router.navigate(['/search'], {
+      queryParams: {
+        origin: this.searchData.origin,
+        destination: this.searchData.destination,
+        date: this.searchData.date?.toISOString()
+      }
+    });
+  }
+
+  // Réserver un itinéraire populaire
+  onBookRoute(route: PopularRoute) {
+    console.log('Réserver itinéraire:', route);
+    // Naviguer vers la page de recherche avec les données pré-remplies
+    this.router.navigate(['/search'], {
+      queryParams: {
+        origin: route.origin,
+        destination: route.destination
+      }
+    });
+  }
+
+  // Créer un compte
+  onCreateAccount() {
+    this.router.navigate(['/register']);
+  }
+
+  // Devenir conducteur
+  onBecomeDriver() {
+    // TODO: Naviguer vers page d'inscription conducteur
+    this.router.navigate(['/register'], {
+      queryParams: { type: 'driver' }
+    });
+  }
 }

@@ -15,27 +15,27 @@
       <!-- Search Form -->
       <mat-card class="search-card">
         <mat-card-content>
-          <form class="search-form">
+          <form class="search-form" (ngSubmit)="onSearch()">
             <mat-form-field appearance="outline" class="origin-field">
               <mat-label>Ville de départ</mat-label>
-              <input matInput placeholder="Ex: Douala, Yaoundé..." />
+              <input matInput [(ngModel)]="searchData.origin" name="origin" placeholder="Ex: Douala, Yaoundé..." required />
               <mat-icon matSuffix>location_on</mat-icon>
             </mat-form-field>
             
             <mat-form-field appearance="outline" class="destination-field">
               <mat-label>Ville d'arrivée</mat-label>
-              <input matInput placeholder="Ex: Bafoussam, Garoua..." />
+              <input matInput [(ngModel)]="searchData.destination" name="destination" placeholder="Ex: Bafoussam, Garoua..." required />
               <mat-icon matSuffix>flag</mat-icon>
             </mat-form-field>
             
             <mat-form-field appearance="outline" class="date-field">
               <mat-label>Date de voyage</mat-label>
-              <input matInput [matDatepicker]="picker" readonly />
+              <input matInput [matDatepicker]="picker" [(ngModel)]="searchData.date" name="date" readonly required />
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
             
-            <button mat-raised-button color="primary" class="search-button">
+            <button mat-raised-button color="primary" class="search-button" type="submit">
               <mat-icon>search</mat-icon>
               Rechercher
             </button>
@@ -115,7 +115,7 @@
               <span class="duration">{{ route.duration }}</span>
             </div>
           </div>
-          <button mat-button color="primary">Réserver</button>
+          <button mat-button color="primary" (click)="onBookRoute(route)">Réserver</button>
         </mat-card-content>
       </mat-card>
     </div>
@@ -128,10 +128,10 @@
         <h2>Prêt à commencer ?</h2>
         <p>Rejoignez des milliers d'utilisateurs qui font confiance à Transport Cameroun</p>
         <div class="cta-buttons">
-          <button mat-raised-button color="primary" size="large">
+          <button mat-raised-button color="primary" size="large" (click)="onCreateAccount()">
             Créer un Compte
           </button>
-          <button mat-stroked-button color="primary" size="large">
+          <button mat-stroked-button color="primary" size="large" (click)="onBecomeDriver()">
             Devenir Conducteur
           </button>
         </div>

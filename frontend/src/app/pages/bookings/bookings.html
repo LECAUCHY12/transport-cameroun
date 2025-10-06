@@ -1,0 +1,193 @@
+<!-- Page des Réservations -->
+<div class="bookings-container">
+  
+  <!-- Header -->
+  <div class="bookings-header">
+    <h1>Mes Réservations</h1>
+    <p>Gérez vos voyages et réservations en cours</p>
+    
+    <!-- Statistiques rapides -->
+    <div class="stats-cards">
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <mat-icon>confirmation_number</mat-icon>
+          <div class="stat-info">
+            <span class="stat-number">{{ getTotalBookings() }}</span>
+            <span class="stat-label">Total réservations</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <mat-icon>schedule</mat-icon>
+          <div class="stat-info">
+            <span class="stat-number">{{ getUpcomingBookings() }}</span>
+            <span class="stat-label">Voyages à venir</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      
+      <mat-card class="stat-card">
+        <mat-card-content>
+          <mat-icon>attach_money</mat-icon>
+          <div class="stat-info">
+            <span class="stat-number">{{ getTotalSpent() }} FCFA</span>
+            <span class="stat-label">Total dépensé</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- Filtres -->
+  <mat-card class="filters-card">
+    <mat-card-content>
+      <div class="filters">
+        <mat-form-field appearance="outline">
+          <mat-label>Statut</mat-label>
+          <mat-select [(ngModel)]="selectedStatus" (selectionChange)="filterBookings()">
+            <mat-option value="all">Tous les statuts</mat-option>
+            <mat-option value="confirmed">Confirmées</mat-option>
+            <mat-option value="pending">En attente</mat-option>
+            <mat-option value="completed">Terminées</mat-option>
+            <mat-option value="cancelled">Annulées</mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Période</mat-label>
+          <mat-select [(ngModel)]="selectedPeriod" (selectionChange)="filterBookings()">
+            <mat-option value="all">Toutes les périodes</mat-option>
+            <mat-option value="upcoming">À venir</mat-option>
+            <mat-option value="past">Passées</mat-option>
+            <mat-option value="this-month">Ce mois</mat-option>
+            <mat-option value="last-month">Mois dernier</mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <button mat-raised-button color="primary" routerLink="/search">
+          <mat-icon>add</mat-icon>
+          Nouvelle Réservation
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Liste des réservations -->
+  <div class="bookings-list" *ngIf="filteredBookings().length > 0">
+    <mat-card class="booking-card" *ngFor="let booking of filteredBookings()" 
+             [ngClass]="'status-' + booking.status">
+      <mat-card-content>
+        
+        <!-- Header de la réservation -->
+        <div class="booking-header">
+          <div class="booking-route">
+            <h3>{{ booking.origin }} → {{ booking.destination }}</h3>
+            <div class="booking-meta">
+              <span class="booking-id">Réservation #{{ booking.id }}</span>
+              <mat-chip [color]="getStatusColor(booking.status)">
+                {{ getStatusLabel(booking.status) }}
+              </mat-chip>
+            </div>
+          </div>
+          
+          <div class="booking-price">
+            <span class="amount">{{ booking.totalPrice }} FCFA</span>
+            <span class="passengers">{{ booking.passengers }} passager(s)</span>
+          </div>
+        </div>
+
+        <!-- Détails du voyage -->
+        <div class="booking-details">
+          <div class="detail-row">
+            <mat-icon>event</mat-icon>
+            <span><strong>Date:</strong> {{ formatDate(booking.travelDate) }}</span>
+          </div>
+          
+          <div class="detail-row">
+            <mat-icon>schedule</mat-icon>
+            <span><strong>Départ:</strong> {{ booking.departureTime }}</span>
+          </div>
+          
+          <div class="detail-row">
+            <mat-icon>{{ getTransportIcon(booking.transportType) }}</mat-icon>
+            <span><strong>Transport:</strong> {{ getTransportLabel(booking.transportType) }}</span>
+          </div>
+          
+          <div class="detail-row">
+            <mat-icon>person</mat-icon>
+            <span><strong>Conducteur:</strong> {{ booking.driverName }}</span>
+          </div>
+          
+          <div class="detail-row" *ngIf="booking.seatNumbers">
+            <mat-icon>event_seat</mat-icon>
+            <span><strong>Sièges:</strong> {{ booking.seatNumbers.join(', ') }}</span>
+          </div>
+        </div>
+
+        <!-- Statut et progress -->
+        <div class="booking-progress" *ngIf="booking.status === 'confirmed'">
+          <div class="progress-info">
+            <mat-icon>info</mat-icon>
+            <span>Votre voyage est confirmé - Soyez à l'heure !</span>
+          </div>
+          
+          <div class="countdown" *ngIf="getTimeUntilTravel(booking) > 0">
+            <mat-icon>timer</mat-icon>
+            <span>Départ dans {{ formatTimeUntil(booking) }}</span>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="booking-actions">
+          <button mat-button (click)="viewDetails(booking)">
+            <mat-icon>visibility</mat-icon>
+            Détails
+          </button>
+          
+          <button mat-button (click)="contactDriver(booking)" 
+                  *ngIf="booking.status === 'confirmed'">
+            <mat-icon>phone</mat-icon>
+            Contacter
+          </button>
+          
+          <button mat-button (click)="downloadTicket(booking)" 
+                  *ngIf="booking.status === 'confirmed' || booking.status === 'completed'">
+            <mat-icon>download</mat-icon>
+            Billet
+          </button>
+          
+          <button mat-button color="warn" (click)="cancelBooking(booking)" 
+                  *ngIf="booking.status === 'confirmed' && canCancel(booking)">
+            <mat-icon>cancel</mat-icon>
+            Annuler
+          </button>
+          
+          <button mat-raised-button color="primary" (click)="rebookTrip(booking)" 
+                  *ngIf="booking.status === 'completed'">
+            <mat-icon>repeat</mat-icon>
+            Réserver à nouveau
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Message si aucune réservation -->
+  <div class="no-bookings" *ngIf="filteredBookings().length === 0">
+    <mat-icon>confirmation_number</mat-icon>
+    <h3>Aucune réservation trouvée</h3>
+    <p *ngIf="selectedStatus === 'all' && selectedPeriod === 'all'">
+      Vous n'avez pas encore effectué de réservation
+    </p>
+    <p *ngIf="selectedStatus !== 'all' || selectedPeriod !== 'all'">
+      Aucune réservation ne correspond à vos filtres
+    </p>
+    <button mat-raised-button color="primary" routerLink="/search">
+      <mat-icon>search</mat-icon>
+      Rechercher un Transport
+    </button>
+  </div>
+
+</div>
